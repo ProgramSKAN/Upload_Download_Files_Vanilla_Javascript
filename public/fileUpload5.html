@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload | We Love Cars</title>
+  </head>
+  <body>
+    <h4>
+      TRACKING UPLOAD PROGRESS: for large file uploads, its often useful to show
+      upload progess. it can only possible with XHR not fetch api
+    </h4>
+    <form method="POST" action="/api/single-file" enctype="multipart/form-data">
+      <input type="file" name="myfile" id="myfile" /><br />
+      <button type="submit">Submit</button>
+    </form>
+    <img />
+    <button id="submitXHR">Submit with XHR</button>
+    <p>Watch Upload progess on console</p>
+    <!-- ---------------------------------------------------- -->
+    <script>
+      const input = document.querySelector('input');
+      const img = document.querySelector('img');
+      document.getElementById('submitXHR').addEventListener('click', () => {
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+        xhr.addEventListener('readystatechange', () => {
+          if (xhr.readyState == xhr.DONE /*4*/) {
+            img.src = URL.createObjectURL(xhr.response);
+          }
+        });
+        xhr.addEventListener('progress', (e) => {
+          //progress event fires periodically
+          console.log(
+            `Upload Percent Complete:${Math.round((e.loaded / e.total) * 100)}%`
+          );
+        });
+        xhr.open('POST', '/api/single-file', true);
+        xhr.send(input.files[0]);
+      });
+    </script>
+  </body>
+</html>

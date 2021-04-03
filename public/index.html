@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload | We Love Cars</title>
+  </head>
+  <body>
+    <!-- -------------------DOWNLOAD FILES------------------------ -->
+    <a href="Tesla Car.jpg">Car Anchor Tag</a>
+    <hr />
+    <a href="Tesla Car.jpg">
+      <img src="Tesla Car.jpg" style="width: 100px; height: auto" />
+    </a>
+    <p>Click on image</p>
+    <hr />
+    <button id="getImage">Show and Download Car Image from Server</button>
+    <hr />
+    <button id="download-button">Download</button>
+    <a id="save-file">Save File</a>
+    <p>watch console for progress</p>
+    <!-- ---------------------------------------------------- -->
+    <script>
+      document.getElementById('getImage').addEventListener('click', () => {
+        fetch('Tesla Car.jpg')
+          .then((res) => res.blob()) //new Blob([response.data]
+          .then((data) => {
+            //---Show-----
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(data);
+            document.body.appendChild(img);
+            //----------Download-------
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(data);
+            a.target = '_blank';
+            a.download = 'Tesla Car.jpg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          });
+      });
+
+      //----------------download with progress-----------
+      // This will hold the the file as a local object URL
+      var _OBJECT_URL;
+
+      // Call an AJAX
+      document
+        .querySelector('#download-button')
+        .addEventListener('click', function () {
+          var request = new XMLHttpRequest();
+          request.addEventListener('readystatechange', function (e) {
+            if (request.readyState == 2 && request.status == 200) {
+              // Download is being started
+            } else if (request.readyState == 3) {
+              // Download is under progress
+            } else if (request.readyState == 4) {
+              // Downloaing has finished
+
+              _OBJECT_URL = URL.createObjectURL(request.response);
+
+              // Set href as a local object URL
+              document
+                .querySelector('#save-file')
+                .setAttribute('href', _OBJECT_URL);
+
+              // Set name of download
+              document
+                .querySelector('#save-file')
+                .setAttribute('download', 'img.jpeg');
+
+              // Recommended : Revoke the object URL after some time to free up resources
+              // There is no way to find out whether user finished downloading
+              setTimeout(function () {
+                window.URL.revokeObjectURL(_OBJECT_URL);
+              }, 60 * 1000);
+            }
+          });
+
+          request.addEventListener('progress', function (e) {
+            var percent_complete = (e.loaded / e.total) * 100;
+            console.log(percent_complete);
+          });
+
+          request.responseType = 'blob';
+
+          // Downloading a JPEG file
+          request.open('get', 'Tesla Car.jpg');
+
+          request.send();
+        });
+    </script>
+  </body>
+</html>

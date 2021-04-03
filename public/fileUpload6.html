@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload | We Love Cars</title>
+  </head>
+  <body>
+    <h4>UPLOADING FILES WITH FETCH API</h4>
+    <form method="POST" action="/api/single-file" enctype="multipart/form-data">
+      <input type="file" name="myfile" id="myfile" /><br />
+      <button type="submit">Submit</button>
+    </form>
+    <button id="submitFetch">Submit with FETCH API</button>
+    <img />
+    <!-- ---------------------------------------------------- -->
+    <script>
+      const input = document.getElementById('myfile');
+      const img = document.querySelector('img');
+      document.getElementById('submitFetch').addEventListener('click', () => {
+        fetch('/api/single-file', {
+          method: 'post',
+          body: input.files[0], //input.files.item(0)
+        })
+          .then((res) => res.blob())
+          .then((data) => (img.src = URL.createObjectURL(data)));
+      });
+    </script>
+  </body>
+</html>

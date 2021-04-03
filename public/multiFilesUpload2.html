@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload | We Love Cars</title>
+  </head>
+  <body>
+    <h4>UPLOADING FORMS WITH MULTIPLE FILES WITH XMLHTTPREQUESTS</h4>
+    <form method="POST" action="/api/multi-file" enctype="multipart/form-data">
+      <input type="file" name="myfiles" id="myfiles" multiple /><br />
+      <button type="submit">Submit</button>
+    </form>
+    <button id="submitXHR">Submit with XHR</button>
+    <p>watch network tab for response</p>
+    <!-- ---------------------------------------------------- -->
+    <script>
+      const form = document.querySelector('form');
+      document.getElementById('submitXHR').addEventListener('click', () => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/multi-file', false);
+        xhr.send(new FormData(form)); //no need to change XHR between single and multiple files upload
+      });
+    </script>
+  </body>
+</html>

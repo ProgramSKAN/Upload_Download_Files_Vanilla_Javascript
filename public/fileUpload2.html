@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload | We Love Cars</title>
+  </head>
+  <body>
+    <h4>
+      STYLING FILE INPUT ELEMENTS: use file input by hiding it because "input
+      type file" it is not stylable
+    </h4>
+    <form method="POST" action="/api/single-file" enctype="multipart/form-data">
+      <input
+        type="file"
+        name="myfile"
+        id="myfile"
+        style="display: none"
+      /><br />
+      <button type="button" id="uploadButton">Choose file to Upload</button>
+      <div>Selected Filename: <span id="filename"></span></div>
+      <button type="submit">Submit</button>
+    </form>
+    <!-- ---------------------------------------------------- -->
+    <script>
+      const fileTag = document.getElementById('myfile');
+      const filenameElem = document.getElementById('filename');
+      document.getElementById('uploadButton').addEventListener('click', () => {
+        fileTag.click();
+      });
+      fileTag.addEventListener('change', () => {
+        filenameElem.innerHTML = fileTag.files[0].name;
+      });
+    </script>
+  </body>
+</html>

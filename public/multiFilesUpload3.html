@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload | We Love Cars</title>
+  </head>
+  <body>
+    <h4>
+      TRACKING UPLOAD PROGRESS OF MULTIPLE FILES (single file per request)
+    </h4>
+    <form method="POST" action="/api/single-file" enctype="multipart/form-data">
+      <input type="file" name="myfile" id="myfile" multiple /><br />
+      <button type="submit">Submit</button>
+    </form>
+    <button id="submitXHR">Submit with XHR</button>
+    <p>Watch Upload progess on console</p>
+    <!-- ---------------------------------------------------- -->
+    <script>
+      const input = document.querySelector('input');
+      document.getElementById('submitXHR').addEventListener('click', () => {
+        for (const file of input.files) {
+          const xhr = new XMLHttpRequest();
+          xhr.responseType = 'blob';
+          xhr.addEventListener('readystatechange', () => {
+            if (xhr.readyState == xhr.DONE /*4*/) {
+              const img = document.createElement('img');
+              img.src = URL.createObjectURL(xhr.response);
+              document.body.appendChild(img);
+            }
+          });
+          xhr.addEventListener('progress', (e) => {
+            //progress event fires periodically
+            console.log(
+              `Filename ${file.name}, Upload Percent Complete:${Math.round(
+                (e.loaded / e.total) * 100
+              )}%`
+            );
+          });
+          xhr.open('POST', '/api/single-file', true);
+          xhr.send(file);
+        }
+      });
+    </script>
+  </body>
+</html>

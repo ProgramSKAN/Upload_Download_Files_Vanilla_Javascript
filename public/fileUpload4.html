@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload | We Love Cars</title>
+  </head>
+  <body>
+    <h4>
+      upload file and get blob response of same file using ASYNCHRONOUS HTTP
+      REQUESTS
+    </h4>
+    <form method="POST" action="/api/single-file" enctype="multipart/form-data">
+      <input type="file" name="myfile" id="myfile" /><br />
+      <button type="submit">Submit</button>
+    </form>
+    <img />
+    <button id="submitXHR">Submit with XHR</button>
+    <!-- ---------------------------------------------------- -->
+    <script>
+      const input = document.querySelector('input');
+      const img = document.querySelector('img');
+      document.getElementById('submitXHR').addEventListener('click', () => {
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob'; //binary file data
+        xhr.addEventListener('readystatechange', () => {
+          //readystatechange fires several times as xhr progresses in async call
+          if (xhr.readyState == xhr.DONE /*4*/) {
+            img.src = URL.createObjectURL(xhr.response);
+          }
+        });
+        xhr.open('POST', '/api/single-file', true); //true: asynchronous call (default)
+        xhr.send(input.files[0]);
+      });
+    </script>
+  </body>
+</html>
